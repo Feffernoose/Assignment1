@@ -22,7 +22,7 @@ public class Customer {
 	private String memberType;
 
 	// Constructor sets name of the Customer at time of creation
-	Customer(String name) {
+	public Customer(String name) {
 		this.name = name;
 	}
 
@@ -52,6 +52,6 @@ public class Customer {
 
 	@Override
 	public String toString() {
-		return "Customer [Name=" + name + ", Member Status = " + isMember + ", Member Type = " + memberType + "]";
+		return "Customer [ Name = " + name + ", Member Status = " + isMember + ", Member Type = " + memberType + "]";
 	}
 }
