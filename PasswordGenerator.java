@@ -104,8 +104,8 @@ public class PasswordGenerator {
 		int flag = 0;
 
 		for (int i = 0; i < password.length(); i++) {
-			if ((password.charAt(i) == '@') && (password.charAt(i) == '!') && (password.charAt(i) >= 58)
-					&& (password.charAt(i) <= 64)) {
+			if ((password.charAt(i) == '@') || (password.charAt(i) == '!') || ((password.charAt(i) >= 58)
+					&& (password.charAt(i) <= 64))) {
 				flag++;
 			}
 		}
