@@ -208,100 +208,115 @@ public class PasswordGenerator2 {
 						{ "Just then the White Rabbit cried out \"Silence in the court!\"\n" },
 						{ "\"HERALD! read the accusation!\" said the King." } } };
 		Random random = new Random();
-		int passwordCount = 0;
-		
+
 		PasswordGenerator2 password = new PasswordGenerator2();
-		
-		
+
 		int singleCharCount = 0, newLineCount = 0, equalsCount = 0, lengthCount = 0, capitalLetterCount = 0,
-				lowerLetterCount = 0, specialCharacterCount = 0, randomWordInt = 0;
-		
+				lowerLetterCount = 0, specialCharacterCount = 0, randomWordInt = 0, passwordCount = 0;
+
 		String chosenLine = "";
 
 		while (passwordCount < 10) {
 
-			// Generate the chosen line using the generateLine method then split into array
-			// of words
 			chosenLine = password.generateLine(book);
 			String wordArray[] = chosenLine.split(" ");
 			randomWordInt = 0;
 			String word = "", threeWords = "", newLine = "\n";
 			// an array to hold the words separately for checking if they are the same
 			String substringArray[] = new String[3];
+			
+			/*
+			 *  If there is not enough words in the chosen line, then we need to
+			 *  start over with a new line or else the program stalls
+			 */
+			if (wordArray.length <= 1) {
+				chosenLine = password.generateLine(book);
 
-			// for loop from 0 to  to take in the three words required for the password.
-			for (int i = 0; i < 3;) {
+			} else {
+				// for loop from 0 to 2 take in the three words required for the password.
+				for (int index = 0; index < 3;) {
 
-				randomWordInt = random.nextInt(wordArray.length);
-				word = wordArray[randomWordInt]; // randomly choose a word
+					randomWordInt = random.nextInt(wordArray.length);
+					word = wordArray[randomWordInt]; // randomly choose a word
 
-				if (checkWordLength(word) == true && word.contains(newLine) == false) {
-					threeWords += word;
-					substringArray[i] = word;
-					i++;
+					if (checkWordLength(word) == true && word.contains(newLine) == false) {
+						threeWords += word;
+						substringArray[index] = word;
+						index++;
+						continue;
+					} else if (checkWordLength(word) == false) {
+						singleCharCount++;
+						continue;
+					} else if (word.contains(newLine) == true) {
+						newLineCount++;
+						continue;
+					}
+				}
+
+				/*
+				 * once all three words are together, start checking specifications. 1) if any
+				 * words are the same, increment count and generate a new line else move on
+				 */
+				if (differentWords(substringArray) == false) {
+					equalsCount++;
 					continue;
-				} else if (checkWordLength(word) == false) {
-					singleCharCount++;
+				}
+
+				/*
+				 * 2) if the length of the password is not between 8 and 16, increment count and
+				 * generate a new line else move on
+				 */
+				else if (lengthOfPassword(threeWords) == false) {
+					lengthCount++;
 					continue;
-				} else if (word.contains(newLine) == true) {
-					newLineCount++;
+				}
+
+				/*
+				 * 3) if there is more than one or if there is no capital letters, increment
+				 * count and generate new line else move on
+				 */
+				else if (hasCapitalLetter(threeWords) == false) {
+					capitalLetterCount++;
 					continue;
+				}
+
+				// 4) if there is no lower case letters, increment
+				// count and generate new line else move on
+				else if (hasLowercaseLetters(threeWords) == false) {
+					lowerLetterCount++;
+					continue;
+				}
+
+				/*
+				 * 5) if there is more than one or if there is no special characters, increment
+				 * count and generate new line else move on
+				 */
+				else if (hasSpecialCharacter(threeWords) == false) {
+					specialCharacterCount++;
+					continue;
+				}
+
+				/*
+				 * 6) Now the password has met all specifications so we can print the password
+				 * along with all of the counts. Then rest all counts to 0, except for password
+				 * count and start with a new chosenLine. 
+				 */
+				else {
+					String newLineString = "NewLine = ";
+					System.out.printf("Password = %-10s", threeWords + " ");
+					System.out.printf("%15s", newLineString + newLineCount + " Single = " + singleCharCount + " Equals = "  
+					+ equalsCount + " Length = " + lengthCount + " Upper = " + capitalLetterCount + " Lower = " 
+					+ lowerLetterCount + " Special = " + specialCharacterCount + "\n");
+					
+					// Must reset all count values to 0 for the new password
+					singleCharCount = newLineCount = equalsCount = lengthCount = capitalLetterCount =
+							lowerLetterCount = specialCharacterCount = 0;
+					
+					//increment the password count
+					passwordCount++;
 				}
 			}
 
-			// once all three words are together, start checking specifications.
-			// 1) if any words are the same, increment count and generate a new line else
-			// move on
-			if (differentWords(substringArray) == false) {
-				equalsCount++;
-				chosenLine = password.generateLine(book);
-			}
-
-			// 2) if the length of the password is not between 8 and 16, increment count and
-			// generate
-			// a new line else move on
-			else if (lengthOfPassword(threeWords) == false) {
-				lengthCount++;
-				chosenLine = password.generateLine(book);
-			}
-
-			// 3) if there is more than one or if there is no capital letters, increment
-			// count and
-			// generate new line else move on
-			else if (hasCapitalLetter(threeWords) == false) {
-				capitalLetterCount++;
-				chosenLine = password.generateLine(book);
-			}
-
-			// 4) if there is no lower case letters, increment
-			// count and
-			// generate new line else move on
-			else if (hasLowercaseLetters(threeWords) == false) {
-				lowerLetterCount++;
-				chosenLine = password.generateLine(book);
-			}
-
-			// 5) if there is more than one or if there is no special characters, increment
-			// count and
-			// generate new line else move on
-			else if (hasSpecialCharacter(threeWords) == false) {
-				specialCharacterCount++;
-				chosenLine = password.generateLine(book);
-			}
-
-			// 6) Now the password has met all specifications so we can print the password
-			// along
-			// with all of the counts. Then rest all counts to 0, except for password count and start with
-			// a new chosenLine
-			else {
-				System.out.println(threeWords + "\n" + " ");
-				System.out.print(singleCharCount + " " + newLineCount + " " + equalsCount + " " + lengthCount + " "
-						+ capitalLetterCount + " " + lowerLetterCount + " " + specialCharacterCount + "\n");
-				
-				passwordCount++;
-				
-			}
-			
 		}
 
 	}
