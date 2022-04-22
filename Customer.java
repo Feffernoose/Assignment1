@@ -9,16 +9,14 @@ package BeautySalon;
 /* My program will create Customers of a beauty salon and generate a bill for their visit. Based on the loyalty
  * program of the beauty salon, the customer will receive a discount of 10-20% for the services and a current flat
  * rate of 10%, although this can change at a later date. Non member customers will not receive any discount. There
- * toString methods to override the default method, and the classes are set up as per instructions given.
+ *  is a toString method to override the default method, and the classes are set up as per instructions given.
  */
 
 public class Customer {
 
-	// Data members are set as private to provide abstraction. isMemeber is set to
-	// false as a default as a new Customer
-	// is less likely to be a member.
+	// Data members are set as private to provide abstraction. 
 	private String name;
-	private boolean isMember = false;
+	private boolean isMember;
 	private String memberType;
 
 	// Constructor sets name of the Customer at time of creation

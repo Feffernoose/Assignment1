@@ -30,26 +30,30 @@ public class DiscountRate {
 	 * members do not receive anything.
 	 */
 
-	private static double getServiceDiscountRate(String memberType) {
+	public static double getServiceDiscountRate(String memberType) {
 
 		if (memberType.equalsIgnoreCase("premium")) {
-			return 0.2;
+			return serviceDiscountPremium;
 		} else if (memberType.equalsIgnoreCase("gold")) {
-			return 0.15;
+			return serviceDiscountGold;
 		} else if (memberType.equalsIgnoreCase("silver")) {
-			return 0.1;
+			return serviceDiscountSilver;
 		} else {
 			return 0;
 		}
 	}
 
-	private static double getProductDiscountRate(String memberType) {
-
-		if (memberType.equalsIgnoreCase("premium") || (memberType.equalsIgnoreCase("gold"))
-				|| (memberType.equalsIgnoreCase("silver"))) {
-			return 0.1;
-		} else {
-			return 0;
+	public static double getProductDiscountRate(String memberType) {
+		double discount = 0.0;
+		if (memberType.equalsIgnoreCase("premium")) {
+			discount = productDiscountPremium;
+		} else if (memberType.equalsIgnoreCase("gold")) {
+			discount = productDiscountGold;
+		} else if (memberType.equalsIgnoreCase("silver")){
+			discount = productDiscountSilver;
+		} else if (memberType.equalsIgnoreCase("not a member")){
+			discount = 0.0;
 		}
+		return discount;
 	}
 }
