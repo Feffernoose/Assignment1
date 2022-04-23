@@ -1,43 +1,48 @@
 package PasswordGenerator;
 
+import java.util.Formatter;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PasswordGenerator2 {
-
+	/*
+	 * The first method here is used to generate the chosen line for the rest of the
+	 * program to verify.
+	 */
 	public String generateLine(String book[][][]) {
+
 		Random random = new Random();
 
-		// First step is choosing page number, paragraph number and line number by using
-		// Random class and nextInt() method
 		String chosenLine = "";
 
-		// do / while loop runs once and checks against the amount of paragraphs and
-		// lines. If they go out of bounds, the randomizer for each runs again.
+		/*
+		 * The loop runs once and and generates a random page number. Once the page 
+		 * number has been generated, the paragraph number will be randomly generated 
+		 * dependent upon the number on the page. The same logic works for the line
+		 * number 
+		 */
 		do {
 
-			// using this variable to set the range of pages, starting from 0 and excluding
-			// length
 			int pageLength = book.length;
-			int randomPageNumber = random.nextInt(pageLength); // generate a page number
+			int randomPageNumber = random.nextInt(pageLength);
 
-			int paragraphAmount = book[randomPageNumber].length; // generate a paragraph number up to number of
-																	// paragraphs on random page
+			int paragraphAmount = book[randomPageNumber].length;
 			int randomParagraphNumber = random.nextInt(paragraphAmount);
 
 			int lineAmount = book[randomPageNumber][randomParagraphNumber].length;
 			int randomLineNumber = random.nextInt(lineAmount);
 
-			// once these three are generated, we can look at the line that is chosen
+			// once these three are generated, the line has been chosen and returned.
 			chosenLine = book[randomPageNumber][randomParagraphNumber][randomLineNumber];
 
 		} while (chosenLine == null);
+
 		return chosenLine;
 	}
 
-	// a method to return true if the word is only a single character, false if more
-	// than one character
+	/*
+	 * A method to return true if the word is only a single character, false if more
+	 * than one character
+	 */
 	public static boolean checkWordLength(String word) {
 		if (word.length() != 1) {
 			return true;
@@ -46,9 +51,11 @@ public class PasswordGenerator2 {
 		}
 	}
 
-	// A method that takes in the String array of the three chosen words and
-	// compares them to each other.
-	// If there is no match, it returns true, else returns false
+	/*
+	 * A method that takes in the String array of the three chosen words and
+	 * compares them to each other. If there is no match, it returns true, else
+	 * returns false
+	 */
 	public static boolean differentWords(String array[]) {
 		String word = array[0], word2 = array[1], word3 = array[2];
 		boolean good = true;
@@ -61,9 +68,10 @@ public class PasswordGenerator2 {
 		return good;
 	}
 
-	// A method that checks for length of password between 8 and 16 characters.
-	// Returns true if yes,
-	// false if no.
+	/*
+	 * A method that checks for length of password between 8 and 16 characters.
+	 * Returns true if yes, false if no.
+	 */
 	public static boolean lengthOfPassword(String password) {
 		int passwordLength = password.length();
 
@@ -207,8 +215,19 @@ public class PasswordGenerator2 {
 								"(some were animals and some were birds) I suppose they are the jurors.\"\n" },
 						{ "Just then the White Rabbit cried out \"Silence in the court!\"\n" },
 						{ "\"HERALD! read the accusation!\" said the King." } } };
+		Formatter center = new Formatter(); // Used to easily format opening banner
 		Random random = new Random();
-
+		String welcome = "Welcome to the Alice in Wonderland Password Generator";
+		
+		// Welcome banner
+				System.out.printf("%84s%n", "*****-----*****-----*****-----*****-----*****-----*****");
+				System.out.println();
+				System.out.println(center.format("%83s", welcome));
+				System.out.println();
+				System.out.printf("%84s%n", "*****-----*****-----*****-----*****-----*****-----*****");
+				System.out.println();
+				
+				
 		PasswordGenerator2 password = new PasswordGenerator2();
 
 		int singleCharCount = 0, newLineCount = 0, equalsCount = 0, lengthCount = 0, capitalLetterCount = 0,
@@ -216,7 +235,11 @@ public class PasswordGenerator2 {
 
 		String chosenLine = "";
 
-		while (passwordCount < 10) {
+		/* 
+		 * As long as we don't have 10000 passwords total or the lowerCountCount increments once
+		 * the program will continue.
+		 */
+		while (passwordCount < 10000 || lowerLetterCount != 0) {
 
 			chosenLine = password.generateLine(book);
 			String wordArray[] = chosenLine.split(" ");
@@ -224,10 +247,10 @@ public class PasswordGenerator2 {
 			String word = "", threeWords = "", newLine = "\n";
 			// an array to hold the words separately for checking if they are the same
 			String substringArray[] = new String[3];
-			
+
 			/*
-			 *  If there is not enough words in the chosen line, then we need to
-			 *  start over with a new line or else the program stalls
+			 * If there is not enough words in the chosen line, then we need to start over
+			 * with a new line or else the program stalls
 			 */
 			if (wordArray.length <= 1) {
 				chosenLine = password.generateLine(book);
@@ -299,25 +322,26 @@ public class PasswordGenerator2 {
 				/*
 				 * 6) Now the password has met all specifications so we can print the password
 				 * along with all of the counts. Then rest all counts to 0, except for password
-				 * count and start with a new chosenLine. 
+				 * count and start with a new chosenLine.
 				 */
-				else {
-					String newLineString = "NewLine = ";
-					System.out.printf("Password = %-10s", threeWords + " ");
-					System.out.printf("%15s", newLineString + newLineCount + " Single = " + singleCharCount + " Equals = "  
-					+ equalsCount + " Length = " + lengthCount + " Upper = " + capitalLetterCount + " Lower = " 
-					+ lowerLetterCount + " Special = " + specialCharacterCount + "\n");
+				else { // need to look into string.format
+					System.out.println(String.format("Password = %-20s\tNewLine = %d\tSingle = %d\tEquals = %d\t"
+							+ "Length = %d\tUpper = %d\tLower = %d\tSpecial = %d", threeWords,newLineCount, singleCharCount,
+							equalsCount, lengthCount, capitalLetterCount, lowerLetterCount, specialCharacterCount));
 					
+				
+
 					// Must reset all count values to 0 for the new password
-					singleCharCount = newLineCount = equalsCount = lengthCount = capitalLetterCount =
-							lowerLetterCount = specialCharacterCount = 0;
-					
-					//increment the password count
+					singleCharCount = newLineCount = equalsCount = lengthCount = capitalLetterCount = lowerLetterCount = specialCharacterCount = 0;
+
+					// increment the password count
 					passwordCount++;
 				}
-			}
+			} 
 
 		}
+		System.out.println("Total Number of Passwords Generated = " + passwordCount);
+		System.out.println("Thank you for using the Password Generator! ");
 
 	}
 
